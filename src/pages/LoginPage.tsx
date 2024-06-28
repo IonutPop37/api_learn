@@ -13,7 +13,8 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     const fetchIpAddress = async () => {
       try {
-        const response = await axios.get('https://api.ipify.org?format=json');
+        const ipUrl = process.env.NEXT_PUBLIC_API_IP_URL;
+        const response = await axios.get(ipUrl);
         setIpAddress(response.data.ip);
       } catch (error) {
         console.error('Error fetching IP address:', error);
@@ -28,10 +29,11 @@ const LoginPage: React.FC = () => {
     const userAgent = navigator.userAgent;
 
     try {
-      const response = await axios.post('https://api-staging.just4myfans.com/login', {
+      const loginUrl = process.env.NEXT_PUBLIC_API_LOGIN;
+      const response = await axios.post(loginUrl, {
         username,
         password,
-        ipAddress: '192.168.1.1', // Dacă dorești să folosești IP fix
+        ipAddress,
         userAgent
       });
 

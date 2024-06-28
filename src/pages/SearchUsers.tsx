@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import {
   Container,
   Box,
@@ -17,6 +17,7 @@ import {
   TableContainer,
   Paper
 } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
 import axios from 'axios';
 
 interface FormData {
@@ -61,9 +62,11 @@ const SearchUsers: React.FC = () => {
   const [results, setResults] = useState<any[]>([]);
   const [message, setMessage] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name as string]: value }));
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | { name?: string; value: unknown }> | SelectChangeEvent<string>
+  ): void => {
+    const { name, value } = e.target as { name: string; value: unknown };
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -76,7 +79,7 @@ const SearchUsers: React.FC = () => {
         return;
       }
 
-      const url = 'https://api-staging.just4myfans.com/v2/admin/users/list';
+      const url = process.env.API_SEARCH_USER;
       const headers = {
         'Authorization': `Bearer ${token}`
       };
@@ -123,7 +126,7 @@ const SearchUsers: React.FC = () => {
             <Select
               name="searchBySocial"
               value={formData.searchBySocial}
-              onChange={handleChange}
+              onChange={handleChange as unknown as (event: SelectChangeEvent<string>, child: React.ReactNode) => void}
               label="Search By Social"
             >
               <MenuItem value=""><em>None</em></MenuItem>
@@ -138,7 +141,7 @@ const SearchUsers: React.FC = () => {
             <Select
               name="sortBy"
               value={formData.sortBy}
-              onChange={handleChange}
+              onChange={handleChange as unknown as (event: SelectChangeEvent<string>, child: React.ReactNode) => void}
               label="Sort By"
             >
               <MenuItem value=""><em>None</em></MenuItem>
@@ -163,7 +166,7 @@ const SearchUsers: React.FC = () => {
             <Select
               name="maturity"
               value={formData.maturity}
-              onChange={handleChange}
+              onChange={handleChange as unknown as (event: SelectChangeEvent<string>, child: React.ReactNode) => void}
               label="Maturity"
             >
               <MenuItem value=""><em>None</em></MenuItem>
@@ -176,7 +179,7 @@ const SearchUsers: React.FC = () => {
             <Select
               name="type"
               value={formData.type}
-              onChange={handleChange}
+              onChange={handleChange as unknown as (event: SelectChangeEvent<string>, child: React.ReactNode) => void}
               label="Type"
             >
               <MenuItem value=""><em>None</em></MenuItem>

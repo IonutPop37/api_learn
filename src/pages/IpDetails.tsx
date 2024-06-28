@@ -1,4 +1,3 @@
-// src/pages/IpDetails.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Container,
@@ -20,9 +19,19 @@ const IpDetails: React.FC = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    console.log('API_IP_URL:', process.env.API_IP_URL);
+    console.log('API_GEO_URL:', process.env.API_GEO_URL);
+
     const fetchIpDetails = async () => {
       try {
-        const response = await axios.get('https://api-staging.just4myfans.com/ip', {
+        const ipUrl = process.env.API_IP_URL;
+        const geoUrl = process.env.API_GEO_URL;
+        
+        if (!ipUrl || !geoUrl) {
+          throw new Error("API URLs are not defined in the environment variables.");
+        }
+
+        const response = await axios.get(ipUrl, {
           headers: {
             'accept': '*/*'
           }
@@ -30,8 +39,7 @@ const IpDetails: React.FC = () => {
         const ipData = response.data;
         setIpDetails(ipData);
 
-        
-        const geoResponse = await axios.get(`https://api-staging.just4myfans.com/geo-location/${ipData.realIp}`, {
+        const geoResponse = await axios.get(`${geoUrl}${ipData.realIp}`, {
           headers: {
             'accept': 'application/json'
           }
@@ -105,8 +113,8 @@ const IpDetails: React.FC = () => {
                   <TableCell>{geoDetails.phoneCode}</TableCell>
                   <TableCell>{geoDetails.capital}</TableCell>
                   <TableCell>{geoDetails.isEu ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>{geoDetails.borders.join(', ')}</TableCell>
-                  <TableCell>{geoDetails.topLevelDomains.join(', ')}</TableCell>
+                  <TableCell>{geoDetails.borders?.join(', ')}</TableCell>
+                  <TableCell>{geoDetails.topLevelDomains?.join(', ')}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
