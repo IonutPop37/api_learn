@@ -19,8 +19,27 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
+interface FormData {
+  page: number;
+  limit: number;
+  searchBySocial: string;
+  searchBy: string;
+  sortBy: string;
+  isClosed: string;
+  isSuspended: string;
+  sunset_mode: string;
+  isFeatured: string;
+  isVerified: string;
+  isVisible: string;
+  isBookmarked: string;
+  maturity: string;
+  type: string;
+  is_email_verified: string;
+  search: string;
+}
+
 const SearchUsers: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     page: 1,
     limit: 10,
     searchBySocial: '',
@@ -39,12 +58,12 @@ const SearchUsers: React.FC = () => {
     search: ''
   });
 
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<any[]>([]);
   const [message, setMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name as string]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
