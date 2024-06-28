@@ -79,7 +79,7 @@ const SearchUsers: React.FC = () => {
         return;
       }
 
-      const url = process.env.API_SEARCH_USER;
+      const url = process.env.NEXT_PUBLIC_API_SEARCH_USER;
       const headers = {
         'Authorization': `Bearer ${token}`
       };
